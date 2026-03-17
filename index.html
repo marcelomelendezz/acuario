@@ -11,584 +11,361 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000d1a;user-select:
 #app{display:flex;flex-direction:column;width:100%;height:100%;}
 
 #hud{
-  flex-shrink:0;display:flex;align-items:center;gap:5px;
-  padding:5px 8px;background:rgba(0,8,20,0.9);
-  border-bottom:1px solid rgba(0,150,255,0.12);flex-wrap:wrap;
+  flex-shrink:0;display:flex;align-items:center;gap:6px;
+  padding:5px 10px;background:rgba(0,10,25,0.85);
+  border-bottom:1px solid rgba(0,150,255,0.15);
+  flex-wrap:wrap;
 }
-.stat{display:flex;align-items:center;gap:3px;font-family:'Nunito',sans-serif;
-  font-size:clamp(9px,2.3vw,11px);color:rgba(140,210,255,0.7);}
+.stat{display:flex;align-items:center;gap:4px;font-family:'Nunito',sans-serif;
+  font-size:clamp(9px,2.5vw,12px);color:rgba(150,220,255,0.7);}
+.stat .icon{font-size:14px;}
 .stat .val{color:#fff;font-weight:900;}
-.sep{width:1px;height:16px;background:rgba(0,150,255,0.18);flex-shrink:0;}
-
-.add-group{display:flex;gap:3px;align-items:center;flex-wrap:wrap;}
-.add-lbl{font-size:8px;color:rgba(100,180,255,0.4);letter-spacing:1px;
-  font-family:'Nunito',sans-serif;white-space:nowrap;}
-
+.hud-sep{width:1px;height:18px;background:rgba(0,150,255,0.2);}
 .hbtn{
-  padding:3px 8px;border-radius:6px;cursor:pointer;
-  font-family:'Nunito',sans-serif;font-size:clamp(8px,2vw,10px);font-weight:900;
-  border:1px solid rgba(0,150,255,0.2);background:rgba(0,150,255,0.07);
-  color:rgba(140,210,255,0.85);transition:all 0.1s;white-space:nowrap;
+  padding:4px 10px;border-radius:8px;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:clamp(8px,2.2vw,11px);font-weight:900;
+  border:1px solid rgba(0,150,255,0.25);background:rgba(0,150,255,0.08);
+  color:rgba(150,220,255,0.8);transition:all 0.1s;letter-spacing:0.5px;
+  white-space:nowrap;
 }
-.hbtn:active{background:rgba(0,150,255,0.2);transform:scale(0.94);}
-.hbtn.sm{border-color:rgba(80,220,160,0.3);background:rgba(80,220,160,0.07);color:rgba(120,255,200,0.85);}
-.hbtn.md{border-color:rgba(100,180,255,0.3);background:rgba(100,180,255,0.07);color:rgba(150,210,255,0.85);}
-.hbtn.lg{border-color:rgba(200,150,255,0.3);background:rgba(200,150,255,0.07);color:rgba(220,180,255,0.85);}
-.hbtn.p1{border-color:rgba(255,100,80,0.3);background:rgba(255,100,80,0.07);color:rgba(255,150,140,0.85);}
-.hbtn.p2{border-color:rgba(255,180,50,0.3);background:rgba(255,180,50,0.07);color:rgba(255,210,120,0.85);}
-.hbtn.p3{border-color:rgba(180,100,255,0.3);background:rgba(180,100,255,0.07);color:rgba(210,160,255,0.85);}
-.hbtn.food{border-color:rgba(255,220,80,0.3);background:rgba(255,220,80,0.07);color:rgba(255,235,150,0.85);}
-.hbtn.reset{border-color:rgba(255,80,80,0.2);background:rgba(255,80,80,0.06);color:rgba(255,140,140,0.7);}
+.hbtn:active{background:rgba(0,150,255,0.25);transform:scale(0.95);}
+.hbtn.danger{border-color:rgba(255,80,80,0.3);background:rgba(255,80,80,0.08);color:rgba(255,150,150,0.8);}
 
 #tank{flex:1;min-height:0;position:relative;overflow:hidden;cursor:crosshair;}
 canvas{display:block;width:100%;height:100%;}
 
 #tip{
   position:absolute;pointer-events:none;z-index:10;
-  background:rgba(0,8,20,0.95);border:1px solid rgba(0,150,255,0.25);
+  background:rgba(0,10,25,0.92);border:1px solid rgba(0,150,255,0.3);
   border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;
-  font-size:10px;color:#88ccff;display:none;white-space:nowrap;
-  box-shadow:0 4px 16px rgba(0,0,0,0.6);
+  font-size:11px;color:#aaddff;display:none;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,0,0,0.5);
 }
-#tip b{color:#fff;display:block;margin-bottom:2px;font-size:11px;}
+#tip b{color:#fff;display:block;margin-bottom:2px;}
 
 #legend{
   position:absolute;bottom:8px;right:8px;
-  background:rgba(0,8,20,0.75);border:1px solid rgba(0,150,255,0.12);
+  background:rgba(0,10,25,0.75);border:1px solid rgba(0,150,255,0.15);
   border-radius:10px;padding:7px 10px;display:flex;flex-direction:column;gap:3px;
-  pointer-events:none;
+  pointer-events:none;backdrop-filter:blur(4px);
 }
 .leg{display:flex;align-items:center;gap:5px;font-family:'Nunito',sans-serif;
-  font-size:9px;color:rgba(140,210,255,0.55);}
-.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  font-size:9px;color:rgba(150,220,255,0.6);}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="hud">
-    <div class="stat">🐠 <span class="val" id="s-fish">0</span></div>
-    <div class="sep"></div>
-    <div class="stat">🦈 <span class="val" id="s-pred">0</span></div>
-    <div class="sep"></div>
-    <div class="stat">🌿 <span class="val" id="s-plant">0</span></div>
-    <div class="sep"></div>
-    <div class="stat">Día <span class="val" id="s-day">1</span></div>
-    <div class="sep"></div>
-
-    <div class="add-group">
-      <span class="add-lbl">PEZ:</span>
-      <button class="hbtn sm" data-add="fish-sm">🐟 Pequeño</button>
-      <button class="hbtn md" data-add="fish-md">🐠 Mediano</button>
-      <button class="hbtn lg" data-add="fish-lg">🐡 Grande</button>
-    </div>
-    <div class="sep"></div>
-    <div class="add-group">
-      <span class="add-lbl">DEPRED.:</span>
-      <button class="hbtn p1" data-add="pred-barracuda">🦷 Barracuda</button>
-      <button class="hbtn p2" data-add="pred-shark">🦈 Tiburón</button>
-      <button class="hbtn p3" data-add="pred-eel">🐍 Anguila</button>
-    </div>
-    <div class="sep"></div>
-    <button class="hbtn food" data-add="food">🦐 Comida</button>
-    <button class="hbtn reset" id="btn-reset">↺</button>
+    <div class="stat"><span class="icon">🐠</span>Peces <span class="val" id="s-fish">0</span></div>
+    <div class="hud-sep"></div>
+    <div class="stat"><span class="icon">🦈</span>Depred. <span class="val" id="s-pred">0</span></div>
+    <div class="hud-sep"></div>
+    <div class="stat"><span class="icon">🌿</span>Plantas <span class="val" id="s-plant">0</span></div>
+    <div class="hud-sep"></div>
+    <div class="stat"><span class="icon">⏱</span>Día <span class="val" id="s-day">1</span></div>
+    <div class="hud-sep"></div>
+    <button class="hbtn" onclick="addFish('sm')">🐟 Pequeño</button>
+    <button class="hbtn" onclick="addFish('md')">🐠 Mediano</button>
+    <button class="hbtn" onclick="addFish('lg')">🐡 Grande</button>
+    <div class="hud-sep"></div>
+    <button class="hbtn" onclick="addPred('barracuda')">🦷 Barracuda</button>
+    <button class="hbtn" onclick="addPred('shark')">🦈 Tiburón</button>
+    <button class="hbtn" onclick="addPred('eel')">🐍 Anguila</button>
+    <div class="hud-sep"></div>
+    <button class="hbtn" onclick="addFood()">🦐 Comida</button>
+    <button class="hbtn danger" onclick="init()">↺ Reiniciar</button>
   </div>
 
   <div id="tank">
     <canvas id="c"></canvas>
     <div id="tip"></div>
     <div id="legend">
-      <div class="leg"><div class="leg-dot" style="background:#44ffaa"></div>Pez pequeño</div>
-      <div class="leg"><div class="leg-dot" style="background:#4488ff"></div>Pez mediano</div>
-      <div class="leg"><div class="leg-dot" style="background:#cc88ff"></div>Pez grande</div>
-      <div class="leg"><div class="leg-dot" style="background:#ff4433"></div>Barracuda</div>
-      <div class="leg"><div class="leg-dot" style="background:#ffaa22"></div>Tiburón</div>
-      <div class="leg"><div class="leg-dot" style="background:#aa44ff"></div>Anguila</div>
+      <div class="leg"><div class="leg-dot" style="background:#44ffaa"></div>Pequeño</div>
+      <div class="leg"><div class="leg-dot" style="background:#ff8844"></div>Mediano</div>
+      <div class="leg"><div class="leg-dot" style="background:#cc88ff"></div>Grande</div>
+      <div class="leg"><div class="leg-dot" style="background:#44aaaa"></div>Barracuda</div>
+      <div class="leg"><div class="leg-dot" style="background:#557788"></div>Tiburón</div>
+      <div class="leg"><div class="leg-dot" style="background:#7733cc"></div>Anguila</div>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// CANVAS
-// ═══════════════════════════════════════════════════════
 const canvas = document.getElementById('c');
 const ctx    = canvas.getContext('2d');
 const tank   = document.getElementById('tank');
-let W = 0, H = 0;
-function resize(){
-  W = canvas.width  = tank.clientWidth;
-  H = canvas.height = tank.clientHeight;
-}
-window.addEventListener('resize', ()=>{ resize(); });
+let W=0, H=0;
+function resize(){ W=canvas.width=tank.clientWidth; H=canvas.height=tank.clientHeight; }
+window.addEventListener('resize', resize);
 resize();
 
-// ═══════════════════════════════════════════════════════
-// FISH SPECIES DEFINITIONS
-// ═══════════════════════════════════════════════════════
+// ── SPECIES ──────────────────────────────────────────────
 const SPECIES = {
-  // ── Small fish ──────────────────────────────────────
-  'fish-sm': {
-    label:'Pez Pequeño', icon:'🐟',
-    sizeMin:5, sizeMax:8, speedBase:1.8, flockRadius:60,
-    hungerRate:0.05, maxAge:1400,
-    colors:[
-      ['#44ffaa','#aaffdd','#22aa66'],  // mint
-      ['#ffee44','#fff8aa','#ccaa00'],  // yellow
-      ['#ff88cc','#ffccee','#cc4488'],  // pink
-      ['#44ffff','#aaffff','#0088aa'],  // cyan
-    ],
-    shape:'tetra',   // small darting tetra-like
-  },
-  // ── Medium fish ─────────────────────────────────────
-  'fish-md': {
-    label:'Pez Mediano', icon:'🐠',
-    sizeMin:10, sizeMax:16, speedBase:1.3, flockRadius:90,
-    hungerRate:0.035, maxAge:2000,
-    colors:[
-      ['#ff6622','#ffaa66','#cc3300'],  // clownfish orange
-      ['#4488ff','#88bbff','#1144cc'],  // blue tang
-      ['#ff44aa','#ff99dd','#cc0066'],  // pink
-      ['#22ddaa','#77ffcc','#009966'],  // teal
-    ],
-    shape:'tropical',
-  },
-  // ── Large fish ──────────────────────────────────────
-  'fish-lg': {
-    label:'Pez Grande', icon:'🐡',
-    sizeMin:18, sizeMax:24, speedBase:0.9, flockRadius:120,
-    hungerRate:0.025, maxAge:2800,
-    colors:[
-      ['#cc88ff','#eeccff','#8833cc'],  // purple puffer
-      ['#ff8822','#ffcc88','#cc4400'],  // orange
-      ['#55cc55','#aaff88','#228822'],  // green
-      ['#ffcc22','#ffee99','#cc8800'],  // gold
-    ],
-    shape:'puffer',
-  },
-  // ── Barracuda ───────────────────────────────────────
-  'pred-barracuda': {
-    label:'Barracuda', icon:'🦷',
-    sizeMin:22, sizeMax:28, speedBase:3.2, huntRadius:280,
-    hungerRate:0.02, maxAge:3000,
-    colors:['#44aaaa','#88dddd','#226666'],
-    shape:'barracuda',  // long thin fast
-    preySize:'sm',      // hunts small fish
-  },
-  // ── Shark ───────────────────────────────────────────
-  'pred-shark': {
-    label:'Tiburón', icon:'🦈',
-    sizeMin:30, sizeMax:38, speedBase:2.0, huntRadius:320,
-    hungerRate:0.018, maxAge:4000,
-    colors:['#557788','#8899aa','#334455'],
-    shape:'shark',
-    preySize:'md',
-  },
-  // ── Eel ─────────────────────────────────────────────
-  'pred-eel': {
-    label:'Anguila', icon:'🐍',
-    sizeMin:14, sizeMax:18, speedBase:1.6, huntRadius:200,
-    hungerRate:0.022, maxAge:2600,
-    colors:['#7733cc','#aa66ff','#440088'],
-    shape:'eel',       // serpentine movement
-    preySize:'sm',
-    segments:8,        // body segments for snake motion
-  },
+  sm: { label:'Pez Pequeño', isPred:false, sizeMin:5, sizeMax:8, speedBase:1.8, maxAge:1400, hungerRate:0.05, flockR:60,
+    colors:[['#44ffaa','#aaffdd','#22aa66'],['#ffee44','#fff8aa','#ccaa00'],['#ff88cc','#ffccee','#cc4488'],['#44ffff','#aaffff','#0088aa']] },
+  md: { label:'Pez Mediano', isPred:false, sizeMin:10, sizeMax:16, speedBase:1.3, maxAge:2000, hungerRate:0.035, flockR:90,
+    colors:[['#ff8844','#ffcc88','#cc4400'],['#4488ff','#88bbff','#1144cc'],['#ff44aa','#ff99dd','#cc0066'],['#22ddaa','#77ffcc','#009966']] },
+  lg: { label:'Pez Grande', isPred:false, sizeMin:18, sizeMax:24, speedBase:0.9, maxAge:2800, hungerRate:0.025, flockR:120,
+    colors:[['#cc88ff','#eeccff','#8833cc'],['#ff8822','#ffcc88','#cc4400'],['#55cc55','#aaff88','#228822'],['#ffcc22','#ffee99','#cc8800']] },
+  barracuda: { label:'Barracuda', isPred:true, sizeMin:22, sizeMax:28, speedBase:3.2, maxAge:3000, hungerRate:0.02,
+    colors:['#44aaaa','#88dddd','#226666'], huntR:280, preyTypes:['sm'] },
+  shark:     { label:'Tiburón',   isPred:true, sizeMin:30, sizeMax:38, speedBase:2.0, maxAge:4000, hungerRate:0.018,
+    colors:['#557788','#8899aa','#334455'], huntR:320, preyTypes:['sm','md','lg'] },
+  eel:       { label:'Anguila',   isPred:true, sizeMin:14, sizeMax:18, speedBase:1.6, maxAge:2600, hungerRate:0.022,
+    colors:['#7733cc','#aa66ff','#440088'], huntR:200, preyTypes:['sm','md'], segs:8 },
 };
 
-// ═══════════════════════════════════════════════════════
-// ENTITY STATE
-// ═══════════════════════════════════════════════════════
-let entities   = [];   // all fish + predators
-let plants     = [];
-let foodItems  = [];
-let particles  = [];
-let bubbles    = [];
-let day = 1, dayTimer = 0, animT = 0;
-let idSeq = 0;
-const uid = () => idSeq++;
+// ── STATE ─────────────────────────────────────────────────
+let entities=[], plants=[], foodItems=[], particles=[], bubbles=[];
+let day=1, dayTimer=0, animT=0, idSeq=0;
+const uid=()=>idSeq++;
 
-// ─── smooth angle helper ────────────────────────────────
-function lerpAngle(a, b, t){
-  let d = b - a;
-  while(d > Math.PI) d -= Math.PI*2;
-  while(d < -Math.PI) d += Math.PI*2;
-  return a + d*t;
+function lerpAngle(a,b,t){
+  let d=b-a;
+  while(d>Math.PI) d-=Math.PI*2;
+  while(d<-Math.PI) d+=Math.PI*2;
+  return a+d*t;
 }
 
-// ═══════════════════════════════════════════════════════
-// FACTORIES
-// ═══════════════════════════════════════════════════════
+// ── FACTORIES ─────────────────────────────────────────────
 function makeEntity(specKey, x, y){
-  const sp = SPECIES[specKey];
-  const isPred = specKey.startsWith('pred-');
-  const sz = sp.sizeMin + Math.random()*(sp.sizeMax-sp.sizeMin);
-
-  let cols;
-  if(isPred){
-    cols = sp.colors;
-  } else {
-    cols = sp.colors[Math.floor(Math.random()*sp.colors.length)];
-  }
-
-  const spawnX = x ?? W*0.1 + Math.random()*W*0.8;
-  const spawnY = y ?? H*0.15 + Math.random()*H*0.65;
-  const angle  = Math.random()*Math.PI*2;
-
-  const e = {
-    id: uid(), specKey, isPred,
-    x: spawnX, y: spawnY,
-    // Smooth motion: use angle + speed instead of vx/vy
-    angle,            // current heading (radians)
-    targetAngle: angle,
-    speed: 0,
-    targetSpeed: sp.speedBase * (0.7 + Math.random()*0.6),
-    size: sz,
-    cols,
-    hunger: isPred ? 30 : 0,
-    age: 0,
-    maxAge: sp.maxAge * (0.8+Math.random()*0.4),
-    reproTimer: 300 + Math.random()*400,
-    tailPhase: Math.random()*Math.PI*2,
-    state: isPred ? 'patrol' : 'wander',
-    targetId: null,
-    scared: 0,
-    dead: false,
-    // For eel: segment positions
-    segments: specKey==='pred-eel' ? Array.from({length:sp.segments||8},()=>({x:spawnX,y:spawnY})) : null,
-    // Trail for trail rendering
-    trail: [],
-    // Wander target
-    wanderX: spawnX, wanderY: spawnY,
-    wanderTimer: 0,
+  const sp=SPECIES[specKey];
+  const sz=sp.sizeMin+Math.random()*(sp.sizeMax-sp.sizeMin);
+  const cols=sp.isPred ? sp.colors : sp.colors[Math.floor(Math.random()*sp.colors.length)];
+  const sx=x??W*0.1+Math.random()*W*0.8;
+  const sy=y??H*0.15+Math.random()*H*0.65;
+  const angle=Math.random()*Math.PI*2;
+  return {
+    id:uid(), specKey, isPred:sp.isPred,
+    x:sx, y:sy, angle, targetAngle:angle, speed:0,
+    targetSpeed:sp.speedBase*(0.7+Math.random()*0.6),
+    size:sz, cols, hunger:sp.isPred?30:0,
+    age:0, maxAge:sp.maxAge*(0.8+Math.random()*0.4),
+    reproTimer:300+Math.random()*400, tailPhase:Math.random()*Math.PI*2,
+    state:sp.isPred?'patrol':'wander', scared:0, dead:false,
+    trail:[], wanderTimer:0,
+    segs:specKey==='eel'?Array.from({length:sp.segs||8},()=>({x:sx,y:sy})):null,
   };
-  return e;
 }
 
 function makePlant(x){
-  return {
-    id:uid(),
-    x: x ?? W*0.08 + Math.random()*W*0.84,
-    y: H,
-    height: 15 + Math.random()*40,
-    maxH:   35 + Math.random()*90,
-    growth: 0.015 + Math.random()*0.025,
-    sway:   Math.random()*Math.PI*2,
-    swaySpd:0.008 + Math.random()*0.018,
-    branches:2+Math.floor(Math.random()*4),
-    col:  `hsl(${125+Math.random()*50},${55+Math.random()*30}%,${28+Math.random()*18}%)`,
-    col2: `hsl(${135+Math.random()*40},${65+Math.random()*28}%,${38+Math.random()*18}%)`,
-    age:0, maxAge:3600+Math.random()*2400,
-    seedTimer:350+Math.random()*300,
-    dead:false,
-  };
+  return { id:uid(), x:x??W*0.08+Math.random()*W*0.84, y:H,
+    height:15+Math.random()*40, maxH:35+Math.random()*90,
+    growth:0.015+Math.random()*0.025, sway:Math.random()*Math.PI*2,
+    swaySpd:0.008+Math.random()*0.018, branches:2+Math.floor(Math.random()*4),
+    col:`hsl(${125+Math.random()*50},${55+Math.random()*30}%,${28+Math.random()*18}%)`,
+    col2:`hsl(${135+Math.random()*40},${65+Math.random()*28}%,${38+Math.random()*18}%)`,
+    age:0, maxAge:3600+Math.random()*2400, seedTimer:350+Math.random()*300, dead:false };
 }
 
-function makeFood(x, y){
-  return {
-    id:uid(),
-    x: x ?? W*0.05 + Math.random()*W*0.9,
-    y: y ?? Math.random()*H*0.4,
-    vx:(Math.random()-0.5)*0.25,
-    vy: 0.18+Math.random()*0.25,
-    size:3+Math.random()*3,
-    life:700+Math.random()*400, age:0,
-    col:`hsl(${45+Math.random()*35},90%,${68+Math.random()*20}%)`,
-  };
+function makeFood(x,y){
+  return { id:uid(), x:x??W*0.05+Math.random()*W*0.9, y:y??Math.random()*H*0.4,
+    vx:(Math.random()-0.5)*0.25, vy:0.18+Math.random()*0.25,
+    size:3+Math.random()*3, life:700+Math.random()*400, age:0,
+    col:`hsl(${45+Math.random()*35},90%,${68+Math.random()*20}%)` };
 }
 
-// ═══════════════════════════════════════════════════════
-// UPDATE
-// ═══════════════════════════════════════════════════════
-const WALL_PAD = 18;
-
-function update(dt){
-  animT += dt;
-  dayTimer += dt;
-  if(dayTimer > 30){ day++; dayTimer = 0; updateHUD(); }
-
-  // Auto-spawn plankton
-  if(Math.random() < 0.006) foodItems.push(makeFood());
-
-  // ── Plants ──
-  plants.forEach(p=>{
-    p.age += dt; p.sway += p.swaySpd;
-    if(p.height < p.maxH) p.height += p.growth * dt;
-    p.seedTimer -= dt;
-    if(p.seedTimer <= 0 && plants.length < 30 && Math.random() < 0.35){
-      p.seedTimer = 350 + Math.random()*400;
-      const nx = p.x + (Math.random()-0.5)*90;
-      if(nx > W*0.02 && nx < W*0.98) plants.push(makePlant(nx));
-    }
-    if(p.age > p.maxAge) p.dead = true;
-  });
-  plants = plants.filter(p=>!p.dead);
-
-  // ── Food ──
-  foodItems.forEach(f=>{
-    f.y += f.vy; f.x += f.vx + Math.sin(animT*0.4+f.id*0.1)*0.08;
-    f.age += dt;
-    if(f.y > H*0.9) f.vy *= 0.9;
-    if(f.x < 5 || f.x > W-5) f.vx *= -1;
-    if(f.age > f.life) f.dead = true;
-  });
-  foodItems = foodItems.filter(f=>!f.dead);
-
-  // ── Entities ──
-  entities.forEach(e=>{
-    const sp = SPECIES[e.specKey];
-    e.age += dt;
-    e.tailPhase += e.isPred ? 0.07 : 0.14;
-    e.hunger = Math.min(100, e.hunger + sp.hungerRate * dt);
-    e.reproTimer -= dt;
-    e.scared = Math.max(0, e.scared - dt*0.4);
-    e.wanderTimer -= dt;
-
-    // ── DECIDE TARGET ──
-    if(e.isPred){
-      updatePredatorAI(e, sp, dt);
-    } else {
-      updateFishAI(e, sp, dt);
-    }
-
-    // ── SMOOTH STEERING ──
-    // Lerp toward targetAngle
-    const turnRate = e.isPred ? 0.06 : 0.1;
-    e.angle = lerpAngle(e.angle, e.targetAngle, turnRate);
-
-    // Lerp speed
-    e.speed += (e.targetSpeed - e.speed) * 0.08;
-
-    // Move
-    e.x += Math.cos(e.angle) * e.speed;
-    e.y += Math.sin(e.angle) * e.speed;
-
-    // ── EEL SEGMENTS ──
-    if(e.segments){
-      e.segments[0] = {x:e.x, y:e.y};
-      const segDist = e.size * 1.4;
-      for(let i=1;i<e.segments.length;i++){
-        const prev = e.segments[i-1];
-        const cur  = e.segments[i];
-        const dx = cur.x - prev.x, dy = cur.y - prev.y;
-        const d  = Math.hypot(dx,dy)||0.001;
-        if(d > segDist){
-          e.segments[i] = {
-            x: prev.x + (dx/d)*segDist,
-            y: prev.y + (dy/d)*segDist,
-          };
-        }
-      }
-    }
-
-    // ── SOFT WALL BOUNCE ──
-    const wallPad = e.size + WALL_PAD;
-    const botWall = H * 0.87 - e.size;
-    // Repel from walls via angle adjustment
-    if(e.x < wallPad)          e.targetAngle = lerpAngle(e.targetAngle, 0, 0.3);
-    if(e.x > W - wallPad)      e.targetAngle = lerpAngle(e.targetAngle, Math.PI, 0.3);
-    if(e.y < wallPad)          e.targetAngle = lerpAngle(e.targetAngle, Math.PI*0.5, 0.3);
-    if(e.y > botWall)          e.targetAngle = lerpAngle(e.targetAngle, -Math.PI*0.5, 0.3);
-    // Hard clamp
-    e.x = Math.max(e.size, Math.min(W-e.size, e.x));
-    e.y = Math.max(e.size, Math.min(botWall, e.y));
-
-    // ── TRAIL ──
-    if(Math.floor(animT*3) % 2 === 0){
-      e.trail.push({x:e.x, y:e.y});
-      if(e.trail.length > 10) e.trail.shift();
-    }
-
-    // ── DEATH ──
-    if(e.hunger >= 100 || e.age > e.maxAge){
-      e.dead = true;
-      spawnParticles(e.x, e.y, e.cols[0], 10, 'death');
-    }
-  });
-  entities = entities.filter(e=>!e.dead);
-
-  // ── REPRODUCTION (fish only) ──
-  const fishList = entities.filter(e=>!e.isPred);
-  fishList.forEach(f=>{
-    if(f.reproTimer > 0 || f.hunger > 65 || fishList.length > 50) return;
-    const mate = fishList.find(o=> o!==f && o.specKey===f.specKey &&
-      Math.hypot(o.x-f.x,o.y-f.y) < 60 && o.reproTimer <= 0);
-    if(mate){
-      f.reproTimer = 500 + Math.random()*300;
-      mate.reproTimer = 500 + Math.random()*300;
-      for(let i=0;i<2+Math.floor(Math.random()*2);i++){
-        const baby = makeEntity(f.specKey,
-          f.x+(Math.random()-0.5)*25, f.y+(Math.random()-0.5)*20);
-        baby.size = SPECIES[f.specKey].sizeMin * 0.6;
-        entities.push(baby);
-      }
-      spawnParticles(f.x, f.y, f.cols[1], 6, 'spawn');
-    }
-  });
-
-  // ── BUBBLES ──
-  bubbles.forEach(b=>{
-    b.y += b.vy; b.wobble += 0.04;
-    b.x += Math.sin(b.wobble) * 0.28;
-    if(b.y < -10){ b.y = H+5; b.x = Math.random()*W; b.vy=-(0.25+Math.random()*0.55); }
-  });
-
-  // ── PARTICLES ──
-  particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.04; p.life--; });
-  particles = particles.filter(p=>p.life>0);
-}
-
-// ── Fish AI ─────────────────────────────────────────────
-function updateFishAI(fish, sp, dt){
-  // Flee from predators
-  let fleeX = 0, fleeY = 0, fleeCount = 0;
-  entities.filter(e=>e.isPred).forEach(pred=>{
-    const d = Math.hypot(pred.x-fish.x, pred.y-fish.y);
-    if(d < 160){
-      fleeX += (fish.x - pred.x)/d;
-      fleeY += (fish.y - pred.y)/d;
-      fleeCount++;
-      fish.scared = 80;
-    }
-  });
-  if(fleeCount > 0){
-    fish.state = 'flee';
-    fish.targetAngle = Math.atan2(fleeY/fleeCount, fleeX/fleeCount);
-    fish.targetSpeed = sp.speedBase * 2.6;
-    return;
-  }
-
-  // Seek food when hungry
-  if(fish.hunger > 45){
-    let nearF = null, nearD = Infinity;
-    foodItems.forEach(f=>{ const d=Math.hypot(f.x-fish.x,f.y-fish.y); if(d<nearD){nearD=d;nearF=f;} });
-    if(nearF && nearD < 200){
-      fish.state = 'seek';
-      fish.targetAngle = Math.atan2(nearF.y-fish.y, nearF.x-fish.x);
-      fish.targetSpeed = sp.speedBase * 1.5;
-      if(nearD < fish.size + nearF.size + 4){
-        nearF.dead = true;
-        fish.hunger = Math.max(0, fish.hunger - 35);
-        spawnParticles(nearF.x, nearF.y, '#ffee88', 4, 'eat');
-      }
-      return;
-    }
-  }
-
-  // Flock + wander
-  fish.state = 'wander';
-  let fx=0, fy=0, ax=0, ay=0, count=0;
-  entities.filter(e=>!e.isPred && e!==fish && e.specKey===fish.specKey).forEach(other=>{
-    const d = Math.hypot(other.x-fish.x, other.y-fish.y);
-    if(d < sp.flockRadius && d > 0){
-      // Cohesion
-      fx += other.x; fy += other.y;
-      // Alignment
-      ax += Math.cos(other.angle); ay += Math.sin(other.angle);
-      count++;
-      // Separation
-      if(d < fish.size*3){
-        fish.targetAngle = lerpAngle(fish.targetAngle,
-          Math.atan2(fish.y-other.y, fish.x-other.x), 0.15);
-      }
-    }
-  });
-  if(count > 0){
-    // Blend cohesion + alignment
-    const cohAngle  = Math.atan2(fy/count-fish.y, fx/count-fish.x);
-    const alignAngle= Math.atan2(ay/count, ax/count);
-    const blendAngle= Math.atan2(
-      Math.sin(cohAngle)*0.4 + Math.sin(alignAngle)*0.6,
-      Math.cos(cohAngle)*0.4 + Math.cos(alignAngle)*0.6
-    );
-    fish.targetAngle = lerpAngle(fish.targetAngle, blendAngle, 0.04);
-  }
-
-  // Wander: pick new random target periodically
-  if(fish.wanderTimer <= 0){
-    fish.wanderTimer = 60 + Math.random()*120;
-    const wa = fish.angle + (Math.random()-0.5)*1.2;
-    fish.targetAngle = wa;
-  }
-  fish.targetSpeed = sp.speedBase * (0.6 + Math.sin(animT*0.3+fish.id)*0.3);
-
-  // Slight vertical centering
-  const midY = H*0.45;
-  if(Math.abs(fish.y-midY) > H*0.25){
-    const toCenter = Math.atan2(midY-fish.y, 0);
-    fish.targetAngle = lerpAngle(fish.targetAngle, toCenter, 0.02);
-  }
-}
-
-// ── Predator AI ──────────────────────────────────────────
-function updatePredatorAI(pred, sp, dt){
-  const preySpecKeys = {
-    'pred-barracuda': ['fish-sm'],
-    'pred-shark':     ['fish-sm','fish-md','fish-lg'],
-    'pred-eel':       ['fish-sm','fish-md'],
-  }[pred.specKey] || ['fish-sm'];
-
-  // Hunt
-  if(pred.hunger > 20){
-    let nearPrey=null, nearDist=Infinity;
-    entities.filter(e=>!e.isPred && preySpecKeys.includes(e.specKey)).forEach(prey=>{
-      const d=Math.hypot(prey.x-pred.x, prey.y-pred.y);
-      if(d < sp.huntRadius && d < nearDist){ nearDist=d; nearPrey=prey; }
-    });
-    if(nearPrey){
-      pred.state = 'hunt';
-      pred.targetAngle = Math.atan2(nearPrey.y-pred.y, nearPrey.x-pred.x);
-      pred.targetSpeed = pred.specKey==='pred-eel'
-        ? sp.speedBase * 1.4
-        : sp.speedBase * (1.2 + pred.hunger/200);
-
-      if(nearDist < pred.size * 0.85){
-        nearPrey.dead = true;
-        pred.hunger = Math.max(0, pred.hunger - 50);
-        spawnParticles(nearPrey.x, nearPrey.y, nearPrey.cols[0], 12, 'death');
-      }
-      return;
-    }
-  }
-
-  // Patrol
-  pred.state = 'patrol';
-  if(pred.wanderTimer <= 0){
-    pred.wanderTimer = 80 + Math.random()*160;
-    pred.targetAngle = pred.angle + (Math.random()-0.5)*1.5;
-  }
-
-  // Eel: sinusoidal extra wobble
-  if(pred.specKey === 'pred-eel'){
-    pred.targetAngle += Math.sin(animT*1.8 + pred.id) * 0.04;
-  }
-
-  pred.targetSpeed = sp.speedBase * (0.5 + Math.random()*0.3);
-
-  // Vertical range by species
-  const pref = {
-    'pred-barracuda': H*0.3,
-    'pred-shark':     H*0.4,
-    'pred-eel':       H*0.7,
-  }[pred.specKey] ?? H*0.45;
-  if(Math.abs(pred.y - pref) > H*0.25){
-    pred.targetAngle = lerpAngle(pred.targetAngle,
-      Math.atan2(pref-pred.y, 0), 0.015);
-  }
-}
-
-function spawnParticles(x,y,col,n,type){
+function spawnParticles(x,y,col,n){
   for(let i=0;i<n;i++){
     const a=Math.random()*Math.PI*2, sp=0.4+Math.random()*2.5;
     particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-0.8,
-      r:1.5+Math.random()*3.5,life:20+Math.random()*20,maxLife:40,col,type});
+      r:1.5+Math.random()*3.5,life:20+Math.random()*20,maxLife:40,col});
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// DRAW
-// ═══════════════════════════════════════════════════════
+// ── GLOBAL ADD FUNCTIONS (called from onclick) ─────────────
+function addFish(size){
+  const key = size==='sm'?'sm':size==='md'?'md':'lg';
+  const max = {sm:50,md:40,lg:25};
+  if(entities.filter(e=>e.specKey===key).length < max[key])
+    entities.push(makeEntity(key));
+  updateHUD();
+}
+function addPred(type){
+  const max = {barracuda:4,shark:3,eel:4};
+  if(entities.filter(e=>e.specKey===type).length < (max[type]||4))
+    entities.push(makeEntity(type));
+  updateHUD();
+}
+function addFood(){
+  for(let i=0;i<10;i++) foodItems.push(makeFood());
+}
+
+// ── UPDATE ────────────────────────────────────────────────
+function update(dt){
+  animT+=dt; dayTimer+=dt;
+  if(dayTimer>30){ day++; dayTimer=0; updateHUD(); }
+  if(Math.random()<0.006) foodItems.push(makeFood());
+
+  // Plants
+  plants.forEach(p=>{
+    p.age+=dt; p.sway+=p.swaySpd;
+    if(p.height<p.maxH) p.height+=p.growth*dt;
+    p.seedTimer-=dt;
+    if(p.seedTimer<=0&&plants.length<30&&Math.random()<0.35){
+      p.seedTimer=350+Math.random()*400;
+      const nx=p.x+(Math.random()-0.5)*90;
+      if(nx>W*0.02&&nx<W*0.98) plants.push(makePlant(nx));
+    }
+    if(p.age>p.maxAge) p.dead=true;
+  });
+  plants=plants.filter(p=>!p.dead);
+
+  // Food
+  foodItems.forEach(f=>{
+    f.y+=f.vy; f.x+=f.vx+Math.sin(animT*0.4+f.id*0.1)*0.08;
+    f.age+=dt;
+    if(f.y>H*0.9) f.vy*=0.9;
+    if(f.x<5||f.x>W-5) f.vx*=-1;
+    if(f.age>f.life) f.dead=true;
+  });
+  foodItems=foodItems.filter(f=>!f.dead);
+
+  // Entities
+  entities.forEach(e=>{
+    const sp=SPECIES[e.specKey];
+    e.age+=dt; e.tailPhase+=e.isPred?0.07:0.14;
+    e.hunger=Math.min(100,e.hunger+sp.hungerRate*dt);
+    e.reproTimer-=dt; e.scared=Math.max(0,e.scared-dt*0.4);
+    e.wanderTimer-=dt;
+
+    if(e.isPred) updatePredAI(e,sp);
+    else         updateFishAI(e,sp);
+
+    // Smooth steering
+    e.angle=lerpAngle(e.angle,e.targetAngle,e.isPred?0.06:0.1);
+    e.speed+=(e.targetSpeed-e.speed)*0.08;
+    e.x+=Math.cos(e.angle)*e.speed;
+    e.y+=Math.sin(e.angle)*e.speed;
+
+    // Eel segments
+    if(e.segs){
+      e.segs[0]={x:e.x,y:e.y};
+      const sd=e.size*1.4;
+      for(let i=1;i<e.segs.length;i++){
+        const prev=e.segs[i-1],cur=e.segs[i];
+        const dx=cur.x-prev.x,dy=cur.y-prev.y,d=Math.hypot(dx,dy)||0.001;
+        if(d>sd) e.segs[i]={x:prev.x+(dx/d)*sd,y:prev.y+(dy/d)*sd};
+      }
+    }
+
+    // Soft wall repulsion
+    const wp=e.size+18, bw=H*0.87-e.size;
+    if(e.x<wp)   e.targetAngle=lerpAngle(e.targetAngle,0,0.3);
+    if(e.x>W-wp) e.targetAngle=lerpAngle(e.targetAngle,Math.PI,0.3);
+    if(e.y<wp)   e.targetAngle=lerpAngle(e.targetAngle,Math.PI*0.5,0.3);
+    if(e.y>bw)   e.targetAngle=lerpAngle(e.targetAngle,-Math.PI*0.5,0.3);
+    e.x=Math.max(e.size,Math.min(W-e.size,e.x));
+    e.y=Math.max(e.size,Math.min(bw,e.y));
+
+    // Trail
+    e.trail.push({x:e.x,y:e.y});
+    if(e.trail.length>10) e.trail.shift();
+
+    if(e.hunger>=100||e.age>e.maxAge){ e.dead=true; spawnParticles(e.x,e.y,e.cols[0],10); }
+  });
+  entities=entities.filter(e=>!e.dead);
+
+  // Fish reproduction
+  const fishList=entities.filter(e=>!e.isPred);
+  fishList.forEach(f=>{
+    if(f.reproTimer>0||f.hunger>65||fishList.length>50) return;
+    const mate=fishList.find(o=>o!==f&&o.specKey===f.specKey&&Math.hypot(o.x-f.x,o.y-f.y)<60&&o.reproTimer<=0);
+    if(mate){
+      f.reproTimer=500+Math.random()*300; mate.reproTimer=500+Math.random()*300;
+      for(let i=0;i<2+Math.floor(Math.random()*2);i++){
+        const baby=makeEntity(f.specKey,f.x+(Math.random()-0.5)*25,f.y+(Math.random()-0.5)*20);
+        baby.size=SPECIES[f.specKey].sizeMin*0.6;
+        entities.push(baby);
+      }
+      spawnParticles(f.x,f.y,f.cols[1],6);
+    }
+  });
+
+  // Bubbles
+  bubbles.forEach(b=>{
+    b.y+=b.vy; b.wobble+=0.04;
+    b.x+=Math.sin(b.wobble)*0.28;
+    if(b.y<-10){b.y=H+5;b.x=Math.random()*W;b.vy=-(0.22+Math.random()*0.5);}
+  });
+
+  // Particles
+  particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.04;p.life--;});
+  particles=particles.filter(p=>p.life>0);
+}
+
+function updateFishAI(fish,sp){
+  // Flee
+  let fleeX=0,fleeY=0,fleeN=0;
+  entities.filter(e=>e.isPred).forEach(pred=>{
+    const d=Math.hypot(pred.x-fish.x,pred.y-fish.y);
+    if(d<160){fleeX+=(fish.x-pred.x)/d;fleeY+=(fish.y-pred.y)/d;fleeN++;fish.scared=80;}
+  });
+  if(fleeN>0){
+    fish.state='flee';
+    fish.targetAngle=Math.atan2(fleeY/fleeN,fleeX/fleeN);
+    fish.targetSpeed=SPECIES[fish.specKey].speedBase*2.6;
+    return;
+  }
+  // Seek food
+  if(fish.hunger>45){
+    let nearF=null,nearD=Infinity;
+    foodItems.forEach(f=>{const d=Math.hypot(f.x-fish.x,f.y-fish.y);if(d<nearD){nearD=d;nearF=f;}});
+    if(nearF&&nearD<200){
+      fish.state='seek';
+      fish.targetAngle=Math.atan2(nearF.y-fish.y,nearF.x-fish.x);
+      fish.targetSpeed=sp.speedBase*1.5;
+      if(nearD<fish.size+nearF.size+4){nearF.dead=true;fish.hunger=Math.max(0,fish.hunger-35);spawnParticles(nearF.x,nearF.y,'#ffee88',4);}
+      return;
+    }
+  }
+  // Flock + wander
+  fish.state='wander';
+  let fx=0,fy=0,ax=0,ay=0,cnt=0;
+  entities.filter(e=>!e.isPred&&e!==fish&&e.specKey===fish.specKey).forEach(o=>{
+    const d=Math.hypot(o.x-fish.x,o.y-fish.y);
+    if(d<sp.flockR&&d>0){
+      fx+=o.x;fy+=o.y;ax+=Math.cos(o.angle);ay+=Math.sin(o.angle);cnt++;
+      if(d<fish.size*3) fish.targetAngle=lerpAngle(fish.targetAngle,Math.atan2(fish.y-o.y,fish.x-o.x),0.15);
+    }
+  });
+  if(cnt>0){
+    const ca=Math.atan2(fy/cnt-fish.y,fx/cnt-fish.x);
+    const aa=Math.atan2(ay/cnt,ax/cnt);
+    fish.targetAngle=lerpAngle(fish.targetAngle,Math.atan2(Math.sin(ca)*0.4+Math.sin(aa)*0.6,Math.cos(ca)*0.4+Math.cos(aa)*0.6),0.04);
+  }
+  if(fish.wanderTimer<=0){fish.wanderTimer=60+Math.random()*120;fish.targetAngle=fish.angle+(Math.random()-0.5)*1.2;}
+  fish.targetSpeed=sp.speedBase*(0.6+Math.sin(animT*0.3+fish.id)*0.3);
+  const midY=H*0.45;
+  if(Math.abs(fish.y-midY)>H*0.25) fish.targetAngle=lerpAngle(fish.targetAngle,Math.atan2(midY-fish.y,0),0.02);
+}
+
+function updatePredAI(pred,sp){
+  if(pred.hunger>20){
+    let nearPrey=null,nearD=Infinity;
+    entities.filter(e=>!e.isPred&&sp.preyTypes.includes(e.specKey)).forEach(prey=>{
+      const d=Math.hypot(prey.x-pred.x,prey.y-pred.y);
+      if(d<sp.huntR&&d<nearD){nearD=d;nearPrey=prey;}
+    });
+    if(nearPrey){
+      pred.state='hunt';
+      pred.targetAngle=Math.atan2(nearPrey.y-pred.y,nearPrey.x-pred.x);
+      pred.targetSpeed=sp.speedBase*(1.2+pred.hunger/200);
+      if(nearD<pred.size*0.85){nearPrey.dead=true;pred.hunger=Math.max(0,pred.hunger-50);spawnParticles(nearPrey.x,nearPrey.y,nearPrey.cols[0],12);}
+      return;
+    }
+  }
+  pred.state='patrol';
+  if(pred.wanderTimer<=0){pred.wanderTimer=80+Math.random()*160;pred.targetAngle=pred.angle+(Math.random()-0.5)*1.5;}
+  if(pred.specKey==='eel') pred.targetAngle+=Math.sin(animT*1.8+pred.id)*0.04;
+  pred.targetSpeed=sp.speedBase*(0.5+Math.random()*0.3);
+  const pref={barracuda:H*0.3,shark:H*0.4,eel:H*0.7}[pred.specKey]??H*0.45;
+  if(Math.abs(pred.y-pref)>H*0.25) pred.targetAngle=lerpAngle(pred.targetAngle,Math.atan2(pref-pred.y,0),0.015);
+}
+
+// ── DRAW ──────────────────────────────────────────────────
 function draw(){
-  // Background
   const bg=ctx.createLinearGradient(0,0,0,H);
   bg.addColorStop(0,'#000d1a');bg.addColorStop(0.55,'#001225');bg.addColorStop(1,'#00080f');
   ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -600,8 +377,7 @@ function draw(){
     const rg=ctx.createLinearGradient(rx,0,rx+35,H*0.72);
     rg.addColorStop(0,'rgba(80,200,255,1)');rg.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle=rg;
-    ctx.beginPath();ctx.moveTo(rx-8,0);ctx.lineTo(rx+42,0);
-    ctx.lineTo(rx+65,H*0.72);ctx.lineTo(rx+18,H*0.72);ctx.fill();
+    ctx.beginPath();ctx.moveTo(rx-8,0);ctx.lineTo(rx+42,0);ctx.lineTo(rx+65,H*0.72);ctx.lineTo(rx+18,H*0.72);ctx.fill();
   }
   ctx.restore();
 
@@ -616,8 +392,7 @@ function draw(){
   // Bubbles
   ctx.save();
   bubbles.forEach(b=>{
-    ctx.globalAlpha=0.2;
-    ctx.strokeStyle='rgba(140,220,255,0.7)';ctx.lineWidth=0.7;
+    ctx.globalAlpha=0.2;ctx.strokeStyle='rgba(140,220,255,0.7)';ctx.lineWidth=0.7;
     ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.stroke();
     ctx.fillStyle='rgba(140,220,255,0.07)';ctx.fill();
   });
@@ -628,10 +403,7 @@ function draw(){
   sandG.addColorStop(0,'#1a1508');sandG.addColorStop(0.5,'#251e0a');sandG.addColorStop(1,'#0f0c04');
   ctx.fillStyle=sandG;ctx.fillRect(0,H*0.87,W,H*0.13);
   ctx.fillStyle='rgba(60,50,15,0.25)';
-  for(let i=0;i<80;i++){
-    ctx.beginPath();
-    ctx.arc(((i*137.5+13)%W),H*0.87+((i*73.1)%(H*0.13)),0.8+i%3,0,Math.PI*2);ctx.fill();
-  }
+  for(let i=0;i<80;i++){ctx.beginPath();ctx.arc(((i*137.5+13)%W),H*0.87+((i*73.1)%(H*0.13)),0.8+i%3,0,Math.PI*2);ctx.fill();}
 
   // Plants
   plants.forEach(p=>{
@@ -639,22 +411,11 @@ function draw(){
     ctx.save();ctx.lineCap='round';
     for(let b=0;b<p.branches;b++){
       const offX=(b-p.branches/2)*10;
-      ctx.strokeStyle=b%2===0?p.col:p.col2;
-      ctx.lineWidth=2.5+b*0.4;
+      ctx.strokeStyle=b%2===0?p.col:p.col2;ctx.lineWidth=2.5+b*0.4;
       ctx.beginPath();
-      const steps=7;
-      for(let i=0;i<=steps;i++){
-        const t=i/steps;
-        const sx=p.x+offX+Math.sin(animT*0.45+i*0.7+b)*sw*t;
-        const sy=p.y-p.height*t;
-        i===0?ctx.moveTo(sx,sy):ctx.lineTo(sx,sy);
-      }
+      for(let i=0;i<=7;i++){const t=i/7;i===0?ctx.moveTo(p.x+offX+Math.sin(animT*0.45+i*0.7+b)*sw*t,p.y-p.height*t):ctx.lineTo(p.x+offX+Math.sin(animT*0.45+i*0.7+b)*sw*t,p.y-p.height*t);}
       ctx.stroke();
-      // Tip leaf
-      ctx.fillStyle=p.col2;
-      const tx=p.x+offX+Math.sin(animT*0.45+steps*0.7+b)*sw;
-      const ty=p.y-p.height;
-      ctx.beginPath();ctx.ellipse(tx,ty,4,7,Math.sin(animT*0.25+b)*0.6,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=p.col2;ctx.beginPath();ctx.ellipse(p.x+offX+Math.sin(animT*0.45+7*0.7+b)*sw,p.y-p.height,4,7,Math.sin(animT*0.25+b)*0.6,0,Math.PI*2);ctx.fill();
     }
     ctx.restore();
   });
@@ -662,333 +423,177 @@ function draw(){
   // Food
   foodItems.forEach(f=>{
     const alpha=Math.min(1,(f.life-f.age)/80);
-    ctx.save();ctx.globalAlpha=alpha;
-    ctx.fillStyle=f.col;ctx.shadowColor=f.col;ctx.shadowBlur=5;
-    ctx.beginPath();ctx.arc(f.x,f.y,f.size,0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=f.col;ctx.shadowColor=f.col;ctx.shadowBlur=5;
+    ctx.beginPath();ctx.arc(f.x,f.y,f.size,0,Math.PI*2);ctx.fill();ctx.restore();
   });
 
-  // Entities (draw fish behind predators)
-  const sorted = [...entities].sort((a,b)=> (a.isPred?1:0)-(b.isPred?1:0));
-  sorted.forEach(e=>{
-    switch(SPECIES[e.specKey].shape){
-      case 'tetra':    drawTetra(e);    break;
-      case 'tropical': drawTropical(e); break;
-      case 'puffer':   drawPuffer(e);   break;
-      case 'barracuda':drawBarracuda(e);break;
-      case 'shark':    drawShark(e);    break;
-      case 'eel':      drawEel(e);      break;
-      default:         drawTropical(e); break;
-    }
+  // Entities (fish first, then predators)
+  [...entities].sort((a,b)=>(a.isPred?1:0)-(b.isPred?1:0)).forEach(e=>{
+    const sp=SPECIES[e.specKey];
+    if(e.specKey==='sm')        drawTetra(e);
+    else if(e.specKey==='md')   drawTropical(e);
+    else if(e.specKey==='lg')   drawPuffer(e);
+    else if(e.specKey==='barracuda') drawBarracuda(e);
+    else if(e.specKey==='shark')     drawShark(e);
+    else if(e.specKey==='eel')       drawEel(e);
   });
 
   // Particles
   particles.forEach(p=>{
     const a=p.life/p.maxLife;
-    ctx.save();ctx.globalAlpha=a*0.9;ctx.fillStyle=p.col;
-    ctx.shadowColor=p.col;ctx.shadowBlur=5;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r*Math.max(0.2,a),0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.save();ctx.globalAlpha=a*0.9;ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r*Math.max(0.2,a),0,Math.PI*2);ctx.fill();ctx.restore();
   });
 
-  // Top depth fade
+  // Depth fade top
   const topF=ctx.createLinearGradient(0,0,0,H*0.07);
   topF.addColorStop(0,'rgba(0,18,38,0.65)');topF.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=topF;ctx.fillRect(0,0,W,H*0.07);
 }
 
-// ─── SHARED DRAW HELPERS ────────────────────────────────
-function fishCtx(e, drawFn){
-  // Age fade
-  const alpha = Math.min(1, Math.min((e.maxAge-e.age)/180, e.age/60));
-  ctx.save();
-  ctx.globalAlpha = Math.max(0.1, alpha);
-  ctx.translate(e.x, e.y);
-  ctx.rotate(e.angle);
-  drawFn();
-  ctx.restore();
-}
+function fishAlpha(e){ return Math.max(0.1, Math.min(1, Math.min((e.maxAge-e.age)/180, e.age/60))); }
+function wrapDraw(e, fn){ ctx.save();ctx.globalAlpha=fishAlpha(e);ctx.translate(e.x,e.y);ctx.rotate(e.angle);fn();ctx.restore(); }
 
-// ─── TETRA (small dart fish) ────────────────────────────
 function drawTetra(e){
   const s=e.size, tw=Math.sin(e.tailPhase)*0.28;
-  fishCtx(e, ()=>{
-    // Slim torpedo body
+  wrapDraw(e,()=>{
     const g=ctx.createLinearGradient(-s,0,s,0);
     g.addColorStop(0,e.cols[2]);g.addColorStop(0.4,e.cols[0]);g.addColorStop(1,e.cols[1]);
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.moveTo(s,0);
-    ctx.bezierCurveTo(s*0.4,s*0.38, -s*0.2,s*0.38, -s*0.7,s*0.22+tw*s*0.6);
-    ctx.bezierCurveTo(-s*0.85,0, -s*0.7,-s*0.22-tw*s*0.6, -s*0.2,-s*0.38);
-    ctx.bezierCurveTo(s*0.4,-s*0.38, s,0,s,0);
-    ctx.fill();
-    // Tail
-    ctx.fillStyle=e.cols[2]+'cc';
-    ctx.beginPath();
-    ctx.moveTo(-s*0.65,tw*s*0.4);
-    ctx.lineTo(-s*1.3,s*0.45+tw*s*0.3);ctx.lineTo(-s*1.25,-s*0.38+tw*s*0.3);ctx.fill();
-    // Stripe
-    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=s*0.12;
-    ctx.beginPath();ctx.moveTo(s*0.6,-s*0.08);ctx.lineTo(-s*0.3,-s*0.08);ctx.stroke();
-    // Eye
+    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(s,0);
+    ctx.bezierCurveTo(s*0.4,s*0.38,-s*0.2,s*0.38,-s*0.7,s*0.22+tw*s*0.6);
+    ctx.bezierCurveTo(-s*0.85,0,-s*0.7,-s*0.22-tw*s*0.6,-s*0.2,-s*0.38);
+    ctx.bezierCurveTo(s*0.4,-s*0.38,s,0,s,0);ctx.fill();
+    ctx.fillStyle=e.cols[2]+'cc';ctx.beginPath();ctx.moveTo(-s*0.65,tw*s*0.4);ctx.lineTo(-s*1.3,s*0.45+tw*s*0.3);ctx.lineTo(-s*1.25,-s*0.38+tw*s*0.3);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=s*0.12;ctx.beginPath();ctx.moveTo(s*0.6,-s*0.08);ctx.lineTo(-s*0.3,-s*0.08);ctx.stroke();
     ctx.fillStyle='#000';ctx.beginPath();ctx.arc(s*0.55,-s*0.08,s*0.14,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s*0.58,-s*0.11,s*0.05,0,Math.PI*2);ctx.fill();
-    // Shine
-    ctx.fillStyle='rgba(255,255,255,0.28)';
-    ctx.beginPath();ctx.ellipse(s*0.15,-s*0.07,s*0.38,s*0.15,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.28)';ctx.beginPath();ctx.ellipse(s*0.15,-s*0.07,s*0.38,s*0.15,0,0,Math.PI*2);ctx.fill();
   });
 }
 
-// ─── TROPICAL (clownfish / blue tang style) ─────────────
 function drawTropical(e){
   const s=e.size, tw=Math.sin(e.tailPhase)*0.3;
-  fishCtx(e, ()=>{
+  wrapDraw(e,()=>{
     const g=ctx.createLinearGradient(-s,0,s,0);
     g.addColorStop(0,e.cols[2]);g.addColorStop(0.35,e.cols[0]);g.addColorStop(1,e.cols[1]);
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.moveTo(s*1.05,0);
-    ctx.bezierCurveTo(s*0.5,s*0.52, -s*0.25,s*0.52, -s*0.8,s*0.28+tw*s*0.7);
-    ctx.bezierCurveTo(-s,0, -s*0.8,-s*0.28-tw*s*0.7, -s*0.25,-s*0.52);
-    ctx.bezierCurveTo(s*0.5,-s*0.52, s*1.05,0,s*1.05,0);
-    ctx.fill();
-    // Tail fin
-    ctx.fillStyle=e.cols[2]+'bb';
-    ctx.beginPath();ctx.moveTo(-s*0.75,tw*s*0.5);
-    ctx.lineTo(-s*1.45,s*0.55+tw*s*0.4);ctx.lineTo(-s*1.38,-s*0.48+tw*s*0.4);ctx.fill();
-    // Dorsal
-    ctx.fillStyle=e.cols[0]+'99';
-    ctx.beginPath();ctx.moveTo(-s*0.05,-s*0.52);ctx.lineTo(s*0.25,-s*1.0);ctx.lineTo(s*0.5,-s*0.52);ctx.fill();
-    // Pectoral fin
-    ctx.fillStyle=e.cols[1]+'88';
-    ctx.beginPath();ctx.ellipse(s*0.2,s*0.22,s*0.28,s*0.15,0.5,0,Math.PI*2);ctx.fill();
-    // White stripe (clownfish style)
-    ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=s*0.18;
-    ctx.beginPath();ctx.moveTo(s*0.1,-s*0.45);ctx.lineTo(s*0.1,s*0.45);ctx.stroke();
-    // Scale arcs
-    ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=0.8;
-    for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(-s*0.15+i*s*0.28,0,s*0.3,Math.PI*0.25,Math.PI*1.75);ctx.stroke();}
-    // Shine
-    ctx.fillStyle='rgba(255,255,255,0.3)';
-    ctx.beginPath();ctx.ellipse(s*0.15,-s*0.1,s*0.42,s*0.2,0,0,Math.PI*2);ctx.fill();
-    // Eye
+    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(s*1.05,0);
+    ctx.bezierCurveTo(s*0.5,s*0.52,-s*0.25,s*0.52,-s*0.8,s*0.28+tw*s*0.7);
+    ctx.bezierCurveTo(-s,0,-s*0.8,-s*0.28-tw*s*0.7,-s*0.25,-s*0.52);
+    ctx.bezierCurveTo(s*0.5,-s*0.52,s*1.05,0,s*1.05,0);ctx.fill();
+    ctx.fillStyle=e.cols[2]+'bb';ctx.beginPath();ctx.moveTo(-s*0.75,tw*s*0.5);ctx.lineTo(-s*1.45,s*0.55+tw*s*0.4);ctx.lineTo(-s*1.38,-s*0.48+tw*s*0.4);ctx.fill();
+    ctx.fillStyle=e.cols[0]+'99';ctx.beginPath();ctx.moveTo(-s*0.05,-s*0.52);ctx.lineTo(s*0.25,-s*1.0);ctx.lineTo(s*0.5,-s*0.52);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.35)';ctx.lineWidth=s*0.18;ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.beginPath();ctx.moveTo(s*0.1,-s*0.45);ctx.lineTo(s*0.1,s*0.45);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.3)';ctx.beginPath();ctx.ellipse(s*0.15,-s*0.1,s*0.42,s*0.2,0,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#000';ctx.beginPath();ctx.arc(s*0.62,-s*0.12,s*0.17,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s*0.66,-s*0.16,s*0.06,0,Math.PI*2);ctx.fill();
   });
 }
 
-// ─── PUFFER (large round fish) ──────────────────────────
 function drawPuffer(e){
   const s=e.size, tw=Math.sin(e.tailPhase)*0.22;
-  fishCtx(e, ()=>{
-    // Round body
+  wrapDraw(e,()=>{
     const g=ctx.createRadialGradient(-s*0.15,-s*0.1,s*0.1,0,0,s);
     g.addColorStop(0,e.cols[1]);g.addColorStop(0.5,e.cols[0]);g.addColorStop(1,e.cols[2]);
-    ctx.fillStyle=g;
-    ctx.beginPath();ctx.ellipse(0,0,s,s*0.85,0,0,Math.PI*2);ctx.fill();
-    // Spots
+    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,0,s,s*0.85,0,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='rgba(0,0,0,0.18)';
-    for(let i=0;i<6;i++){
-      const a=i*Math.PI/3, r=s*0.5;
-      ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r*0.85,s*0.12,0,Math.PI*2);ctx.fill();
-    }
-    // Tail
-    ctx.fillStyle=e.cols[2]+'cc';
-    ctx.beginPath();ctx.moveTo(-s*0.88,tw*s*0.4);
-    ctx.lineTo(-s*1.5,s*0.5+tw*s);ctx.lineTo(-s*1.45,-s*0.45+tw*s);ctx.fill();
-    // Fins
-    ctx.fillStyle=e.cols[1]+'77';
-    ctx.beginPath();ctx.ellipse(s*0.1,s*0.6,s*0.35,s*0.18,0.3,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.ellipse(s*0.1,-s*0.6,s*0.35,s*0.18,-0.3,0,Math.PI*2);ctx.fill();
-    // Shine
-    ctx.fillStyle='rgba(255,255,255,0.32)';
-    ctx.beginPath();ctx.ellipse(-s*0.2,-s*0.28,s*0.45,s*0.28,0,0,Math.PI*2);ctx.fill();
-    // Eye
+    for(let i=0;i<6;i++){const a=i*Math.PI/3,r=s*0.5;ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r*0.85,s*0.12,0,Math.PI*2);ctx.fill();}
+    ctx.fillStyle=e.cols[2]+'cc';ctx.beginPath();ctx.moveTo(-s*0.88,tw*s*0.4);ctx.lineTo(-s*1.5,s*0.5+tw*s);ctx.lineTo(-s*1.45,-s*0.45+tw*s);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.32)';ctx.beginPath();ctx.ellipse(-s*0.2,-s*0.28,s*0.45,s*0.28,0,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#000';ctx.beginPath();ctx.arc(s*0.5,-s*0.12,s*0.2,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='rgba(255,255,255,0.9)';ctx.beginPath();ctx.arc(s*0.56,-s*0.17,s*0.07,0,Math.PI*2);ctx.fill();
-    // Mouth
-    ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=s*0.08;
-    ctx.beginPath();ctx.arc(s*0.88,s*0.1,s*0.12,Math.PI*1.2,Math.PI*1.8);ctx.stroke();
   });
 }
 
-// ─── BARRACUDA (long thin fast) ─────────────────────────
 function drawBarracuda(e){
   const s=e.size, tw=Math.sin(e.tailPhase)*0.18;
-  const hunting = e.state==='hunt';
-  fishCtx(e, ()=>{
+  wrapDraw(e,()=>{
     const g=ctx.createLinearGradient(-s*1.5,0,s*1.5,0);
     g.addColorStop(0,e.cols[2]);g.addColorStop(0.4,e.cols[0]);g.addColorStop(1,e.cols[1]);
-    ctx.fillStyle=g;
-    // Elongated slim body
-    ctx.beginPath();
-    ctx.moveTo(s*1.5,0);
-    ctx.bezierCurveTo(s*0.8,s*0.22, -s*0.8,s*0.25, -s*1.2,s*0.15+tw*s*0.5);
-    ctx.bezierCurveTo(-s*1.5,0, -s*1.2,-s*0.15-tw*s*0.5, -s*0.8,-s*0.25);
-    ctx.bezierCurveTo(s*0.8,-s*0.22, s*1.5,0,s*1.5,0);
-    ctx.fill();
-    // Tail fork
-    ctx.fillStyle=e.cols[2];
-    ctx.beginPath();ctx.moveTo(-s*1.15,tw*s*0.3);
-    ctx.lineTo(-s*1.8,s*0.42+tw*s*0.5);ctx.lineTo(-s*1.72,0);ctx.fill();
-    ctx.beginPath();ctx.moveTo(-s*1.15,tw*s*0.3);
-    ctx.lineTo(-s*1.8,-s*0.38+tw*s*0.5);ctx.lineTo(-s*1.72,0);ctx.fill();
-    // Dorsal
-    ctx.fillStyle=e.cols[0]+'88';
-    ctx.beginPath();ctx.moveTo(s*0.2,-s*0.25);ctx.lineTo(s*0.5,-s*0.7);ctx.lineTo(s*0.8,-s*0.25);ctx.fill();
-    ctx.beginPath();ctx.moveTo(-s*0.3,-s*0.25);ctx.lineTo(-s*0.1,-s*0.55);ctx.lineTo(s*0.1,-s*0.25);ctx.fill();
-    // Teeth (when hunting)
-    if(hunting){
-      ctx.strokeStyle='rgba(255,255,255,0.8)';ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(s*1.3,s*0.06);ctx.lineTo(s*1.48,s*0.1);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(s*1.3,-s*0.06);ctx.lineTo(s*1.48,-s*0.1);ctx.stroke();
-    }
-    // Lateral line
-    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=s*0.06;
-    ctx.beginPath();ctx.moveTo(s*0.8,0);ctx.lineTo(-s*0.8,0);ctx.stroke();
-    // Shine
-    ctx.fillStyle='rgba(255,255,255,0.22)';
-    ctx.beginPath();ctx.ellipse(s*0.3,-s*0.06,s*0.7,s*0.1,0,0,Math.PI*2);ctx.fill();
-    // Eye
+    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(s*1.5,0);
+    ctx.bezierCurveTo(s*0.8,s*0.22,-s*0.8,s*0.25,-s*1.2,s*0.15+tw*s*0.5);
+    ctx.bezierCurveTo(-s*1.5,0,-s*1.2,-s*0.15-tw*s*0.5,-s*0.8,-s*0.25);
+    ctx.bezierCurveTo(s*0.8,-s*0.22,s*1.5,0,s*1.5,0);ctx.fill();
+    ctx.fillStyle=e.cols[2];ctx.beginPath();ctx.moveTo(-s*1.15,tw*s*0.3);ctx.lineTo(-s*1.8,s*0.42+tw*s*0.5);ctx.lineTo(-s*1.72,0);ctx.fill();
+    ctx.beginPath();ctx.moveTo(-s*1.15,tw*s*0.3);ctx.lineTo(-s*1.8,-s*0.38+tw*s*0.5);ctx.lineTo(-s*1.72,0);ctx.fill();
+    ctx.fillStyle=e.cols[0]+'88';ctx.beginPath();ctx.moveTo(s*0.2,-s*0.25);ctx.lineTo(s*0.5,-s*0.7);ctx.lineTo(s*0.8,-s*0.25);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.22)';ctx.beginPath();ctx.ellipse(s*0.3,-s*0.06,s*0.7,s*0.1,0,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#cc3300';ctx.beginPath();ctx.arc(s*1.1,-s*0.08,s*0.13,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#000';ctx.beginPath();ctx.arc(s*1.1,-s*0.08,s*0.08,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s*1.13,-s*0.11,s*0.04,0,Math.PI*2);ctx.fill();
   });
 }
 
-// ─── SHARK ──────────────────────────────────────────────
 function drawShark(e){
   const s=e.size, tw=Math.sin(e.tailPhase)*0.15;
-  fishCtx(e, ()=>{
+  wrapDraw(e,()=>{
     const g=ctx.createLinearGradient(-s,0,s,0);
     g.addColorStop(0,e.cols[2]);g.addColorStop(0.45,e.cols[0]);g.addColorStop(1,e.cols[1]);
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.moveTo(s*1.35,0);
-    ctx.bezierCurveTo(s*0.7,s*0.42, -s*0.5,s*0.52, -s*1.0,s*0.28+tw*s*0.7);
-    ctx.bezierCurveTo(-s*1.35,0, -s*1.0,-s*0.28-tw*s*0.7, -s*0.5,-s*0.52);
-    ctx.bezierCurveTo(s*0.7,-s*0.42, s*1.35,0,s*1.35,0);
-    ctx.fill();
-    // Tail (heterocercal - upper lobe bigger)
-    ctx.fillStyle=e.cols[2];
-    ctx.beginPath();ctx.moveTo(-s*0.95,tw*s*0.35);
-    ctx.lineTo(-s*1.7,s*0.55+tw*s*0.6);ctx.lineTo(-s*1.6,s*0.05);ctx.fill();
-    ctx.beginPath();ctx.moveTo(-s*0.95,tw*s*0.35);
-    ctx.lineTo(-s*1.55,-s*0.3+tw*s*0.6);ctx.lineTo(-s*1.6,s*0.05);ctx.fill();
-    // Dorsal fin (iconic)
-    ctx.fillStyle=e.cols[2];
-    ctx.beginPath();ctx.moveTo(s*0.1,-s*0.52);ctx.lineTo(s*0.55,-s*1.25);ctx.lineTo(s*0.85,-s*0.52);ctx.fill();
-    // Pectoral fins
-    ctx.fillStyle=e.cols[0]+'88';
-    ctx.beginPath();ctx.moveTo(s*0.4,s*0.52);ctx.lineTo(s*0.0,s*1.0);ctx.lineTo(-s*0.25,s*0.52);ctx.fill();
+    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(s*1.35,0);
+    ctx.bezierCurveTo(s*0.7,s*0.42,-s*0.5,s*0.52,-s*1.0,s*0.28+tw*s*0.7);
+    ctx.bezierCurveTo(-s*1.35,0,-s*1.0,-s*0.28-tw*s*0.7,-s*0.5,-s*0.52);
+    ctx.bezierCurveTo(s*0.7,-s*0.42,s*1.35,0,s*1.35,0);ctx.fill();
+    ctx.fillStyle=e.cols[2];ctx.beginPath();ctx.moveTo(-s*0.95,tw*s*0.35);ctx.lineTo(-s*1.7,s*0.55+tw*s*0.6);ctx.lineTo(-s*1.6,s*0.05);ctx.fill();
+    ctx.beginPath();ctx.moveTo(-s*0.95,tw*s*0.35);ctx.lineTo(-s*1.55,-s*0.3+tw*s*0.6);ctx.lineTo(-s*1.6,s*0.05);ctx.fill();
+    ctx.fillStyle=e.cols[2];ctx.beginPath();ctx.moveTo(s*0.1,-s*0.52);ctx.lineTo(s*0.55,-s*1.25);ctx.lineTo(s*0.85,-s*0.52);ctx.fill();
+    ctx.fillStyle=e.cols[0]+'88';ctx.beginPath();ctx.moveTo(s*0.4,s*0.52);ctx.lineTo(s*0.0,s*1.0);ctx.lineTo(-s*0.25,s*0.52);ctx.fill();
     ctx.beginPath();ctx.moveTo(s*0.4,-s*0.52);ctx.lineTo(s*0.0,-s*1.0);ctx.lineTo(-s*0.25,-s*0.52);ctx.fill();
-    // Belly (lighter)
     const belly=ctx.createLinearGradient(0,-s*0.1,0,s*0.2);
     belly.addColorStop(0,'rgba(255,255,255,0.22)');belly.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=belly;ctx.beginPath();ctx.ellipse(s*0.1,s*0.12,s*0.8,s*0.28,0,0,Math.PI*2);ctx.fill();
-    // Gills
-    ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=s*0.05;
-    for(let g2=0;g2<3;g2++){
-      ctx.beginPath();ctx.moveTo(s*0.6+g2*s*0.12,s*0.18);ctx.lineTo(s*0.58+g2*s*0.12,-s*0.18);ctx.stroke();
-    }
-    // Eye
     ctx.fillStyle='#000';ctx.beginPath();ctx.arc(s*0.82,-s*0.14,s*0.16,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='rgba(255,255,255,0.85)';ctx.beginPath();ctx.arc(s*0.86,-s*0.18,s*0.06,0,Math.PI*2);ctx.fill();
   });
 }
 
-// ─── EEL (serpentine segments) ──────────────────────────
 function drawEel(e){
-  if(!e.segments||e.segments.length<2) return;
-  const alpha=Math.min(1,Math.min((e.maxAge-e.age)/180,e.age/60));
+  if(!e.segs||e.segs.length<2) return;
+  const alpha=fishAlpha(e);
   ctx.save();ctx.globalAlpha=Math.max(0.1,alpha);
-
-  const segs=e.segments;
-  const n=segs.length;
-  // Draw body as thick tapered line
+  const segs=e.segs, n=segs.length;
   for(let i=0;i<n-1;i++){
-    const t=i/(n-1);
-    const thick=e.size*(1-t*0.6);
-    const col=i%2===0?e.cols[0]:e.cols[1];
-    ctx.strokeStyle=col;ctx.lineWidth=thick*2;ctx.lineCap='round';
+    const t=i/(n-1), thick=e.size*(1-t*0.6);
+    ctx.strokeStyle=i%2===0?e.cols[0]:e.cols[1];ctx.lineWidth=thick*2;ctx.lineCap='round';
     ctx.beginPath();ctx.moveTo(segs[i].x,segs[i].y);ctx.lineTo(segs[i+1].x,segs[i+1].y);ctx.stroke();
   }
-  // Underbelly highlight
   ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=e.size*0.5;
   ctx.beginPath();segs.forEach((s,i)=>i===0?ctx.moveTo(s.x,s.y):ctx.lineTo(s.x,s.y));ctx.stroke();
-
   // Head
-  const head=segs[0];
-  const headAngle=e.angle;
-  ctx.save();ctx.translate(head.x,head.y);ctx.rotate(headAngle);
-  // Head shape
-  const hs=e.size;
-  ctx.fillStyle=e.cols[0];
-  ctx.beginPath();ctx.ellipse(hs*0.3,0,hs*0.7,hs*0.45,0,0,Math.PI*2);ctx.fill();
-  // Eye
+  const head=segs[0], hs=e.size;
+  ctx.save();ctx.translate(head.x,head.y);ctx.rotate(e.angle);
+  ctx.fillStyle=e.cols[0];ctx.beginPath();ctx.ellipse(hs*0.3,0,hs*0.7,hs*0.45,0,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#ffee00';ctx.beginPath();ctx.arc(hs*0.6,-hs*0.18,hs*0.18,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#000';ctx.beginPath();ctx.arc(hs*0.62,-hs*0.18,hs*0.1,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,0.8)';ctx.beginPath();ctx.arc(hs*0.65,-hs*0.21,hs*0.04,0,Math.PI*2);ctx.fill();
-  // Mouth
-  ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=hs*0.08;
-  ctx.beginPath();ctx.moveTo(hs,hs*0.08);ctx.lineTo(hs*0.75,hs*0.12);ctx.stroke();
   ctx.restore();
-
   ctx.restore();
 }
 
-// ═══════════════════════════════════════════════════════
-// INTERACTION
-// ═══════════════════════════════════════════════════════
+// ── INTERACTION ───────────────────────────────────────────
 function getPos(e){
   const r=canvas.getBoundingClientRect();
   const s=e.touches?e.touches[0]:e;
   return{x:(s.clientX-r.left)*(W/r.width),y:(s.clientY-r.top)*(H/r.height)};
 }
-
 canvas.addEventListener('click',e=>{
   const {x,y}=getPos(e);
   for(let i=0;i<4;i++) foodItems.push(makeFood(x+(Math.random()-0.5)*35,y+(Math.random()-0.5)*25));
 });
-
 canvas.addEventListener('mousemove',e=>{
   const {x,y}=getPos(e);
   const tip=document.getElementById('tip');
   let found=null;
-  entities.forEach(ent=>{
-    const d=Math.hypot(ent.x-x,ent.y-y);
-    if(d<ent.size*2) found=ent;
-  });
+  entities.forEach(en=>{if(Math.hypot(en.x-x,en.y-y)<en.size*2)found=en;});
   if(found){
     const sp=SPECIES[found.specKey];
     tip.style.display='block';
     tip.style.left=Math.min(x+14,W-170)+'px';
     tip.style.top=Math.max(10,y-55)+'px';
-    tip.innerHTML=`<b>${sp.icon} ${sp.label}</b>
-      Edad: ${Math.floor(found.age/60)}s · Tamaño: ${found.size.toFixed(1)}<br>
-      Hambre: ${Math.floor(found.hunger)}% · Estado: ${found.state}`;
+    tip.innerHTML=`<b>${found.isPred?'🦈':'🐠'} ${sp.label}</b>Edad: ${Math.floor(found.age/60)}s · Hambre: ${Math.floor(found.hunger)}% · ${found.state}`;
   } else tip.style.display='none';
 });
 canvas.addEventListener('mouseleave',()=>document.getElementById('tip').style.display='none');
 
-// Buttons
-function addEntity(key){
-  if(key==='food'){ for(let i=0;i<10;i++) foodItems.push(makeFood()); updateHUD(); return; }
-  const maxes={'fish-sm':50,'fish-md':40,'fish-lg':25,'pred-barracuda':4,'pred-shark':3,'pred-eel':4};
-  const limit=maxes[key]||10;
-  const cur=entities.filter(e=>e.specKey===key).length;
-  if(cur<limit){ entities.push(makeEntity(key)); updateHUD(); }
-}
-document.querySelectorAll('[data-add]').forEach(btn=>{
-  btn.addEventListener('click',e=>{ e.preventDefault(); addEntity(btn.dataset.add); });
-  btn.addEventListener('touchend',e=>{ e.preventDefault(); addEntity(btn.dataset.add); });
-}));
-document.getElementById('btn-reset').addEventListener('click', e=>{ e.preventDefault(); init(); });
-
-// ═══════════════════════════════════════════════════════
-// LOOP
-// ═══════════════════════════════════════════════════════
+// ── HUD + INIT + LOOP ─────────────────────────────────────
 function updateHUD(){
   document.getElementById('s-fish').textContent=entities.filter(e=>!e.isPred).length;
   document.getElementById('s-pred').textContent=entities.filter(e=>e.isPred).length;
@@ -999,36 +604,25 @@ function updateHUD(){
 function init(){
   entities=[];plants=[];foodItems=[];particles=[];bubbles=[];
   day=1;dayTimer=0;animT=0;
-  // Initial population
-  for(let i=0;i<8;i++)  entities.push(makeEntity('fish-sm'));
-  for(let i=0;i<5;i++)  entities.push(makeEntity('fish-md'));
-  for(let i=0;i<3;i++)  entities.push(makeEntity('fish-lg'));
-  entities.push(makeEntity('pred-barracuda'));
-  entities.push(makeEntity('pred-shark'));
-  entities.push(makeEntity('pred-eel'));
+  for(let i=0;i<8;i++)  entities.push(makeEntity('sm'));
+  for(let i=0;i<5;i++)  entities.push(makeEntity('md'));
+  for(let i=0;i<3;i++)  entities.push(makeEntity('lg'));
+  entities.push(makeEntity('barracuda'));
+  entities.push(makeEntity('shark'));
+  entities.push(makeEntity('eel'));
   for(let i=0;i<7;i++)  plants.push(makePlant());
   for(let i=0;i<18;i++) foodItems.push(makeFood());
-  for(let i=0;i<25;i++) bubbles.push({
-    x:Math.random()*W,y:H+Math.random()*H,
-    vy:-(0.22+Math.random()*0.5),r:0.8+Math.random()*3.5,
-    wobble:Math.random()*Math.PI*2,
-  });
+  for(let i=0;i<25;i++) bubbles.push({x:Math.random()*W,y:H+Math.random()*H,vy:-(0.22+Math.random()*0.5),r:0.8+Math.random()*3.5,wobble:Math.random()*Math.PI*2});
   updateHUD();
 }
 
 let lastTs=0;
 function loop(ts){
-  const raw=ts-lastTs; lastTs=ts;
-  const dt=Math.min(2.5, raw/16.67); // normalized dt, capped
-  update(dt);
-  draw();
-  updateHUD();
+  const dt=Math.min(2.5,(ts-lastTs)/16.67); lastTs=ts;
+  update(dt); draw(); updateHUD();
   requestAnimationFrame(loop);
 }
-
-window.addEventListener('load',()=>{
-  setTimeout(()=>{ resize(); init(); requestAnimationFrame(loop); },80);
-});
+window.addEventListener('load',()=>setTimeout(()=>{ resize(); init(); requestAnimationFrame(loop); },80));
 </script>
 </body>
 </html>
